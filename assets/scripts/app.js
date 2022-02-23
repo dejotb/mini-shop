@@ -1,46 +1,56 @@
-const productList = {
-  products: [
-    {
-      title: 'A Pillow',
-      imageUrl:
-        'https://media.istockphoto.com/vectors/pillow-vector-id1286304688?k=20&m=1286304688&s=612x612&w=0&h=wOwwOBPyERGVbAn8412_0WErJjXUe_3Iq-NaQjlCliw=',
-      price: 19.99,
-      description: 'A soft pillow',
-    },
+// productList.render();
 
-    {
-      title: 'A Carpet',
-      imageUrl:
-        'https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Fencrypted-tbn0.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcQGT3XHbg9-TaKBlQFJNmLR7kWp7y7s2dQ6T_4J4NSIEy2vkNs7%26s&sp=1645639167Tfaa1ee443a997d594cabcc317921ed1fd428e3d6ab5a713dd765fce9f8fe244e',
-      price: 89.99,
-      description: 'A nice carpet',
-    },
-  ],
+class Product {
+  constructor(title, imageUrl, price, description) {
+    this.title = title;
+    this.imageUrl = imageUrl;
+    this.price = price;
+    this.description = description;
+  }
+
   render() {
     const renderHook = document.querySelector('#app');
     const prodList = document.createElement('ul');
     prodList.className = 'product-list';
 
-    this.products.forEach((product) => {
-      prodList.insertAdjacentHTML(
-        'beforeEnd',
-        `<li class='product-item'>
+    prodList.insertAdjacentHTML(
+      'beforeEnd',
+      `<li class='product-item'>
             <div>
-            <img src=${product.imageUrl} alt="${product.title}">
+            <img src=${this.imageUrl} alt="${this.title}">
             </div>
             <div class="product-item__content">
-            <h2>${product.title}</h2>
-            <h3>$${product.price}</h3>
-            <p>${product.description}</p>
+            <h2>${this.title}</h2>
+            <h3>$${this.price}</h3>
+            <p>${this.description}</p>
             <button>Add to Cart</button>
             </div>
 
         </li>`
-      );
-    });
+    );
 
     renderHook.append(prodList);
-  },
+  }
+}
+
+// pillow.render();
+
+const productList = {
+  products: [
+    new Product(
+      'A Pillow',
+      'https://media.istockphoto.com/vectors/pillow-vector-id1286304688?k=20&m=1286304688&s=612x612&w=0&h=wOwwOBPyERGVbAn8412_0WErJjXUe_3Iq-NaQjlCliw=',
+      19.99,
+      'A soft pillow'
+    ),
+
+    new Product(
+      'A Carpet',
+      'https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Fkrux.tech%2Fwp-content%2Fuploads%2F2021%2F12%2Fkrx0107-krux-space-carpet-xxl-01.jpg&sp=1645653186T752c73b03de9866afd5d7a1d535ec55548c1e0b3acf0dad29083002cb5889bd6',
+      89.99,
+      'A nice carpet'
+    ),
+  ],
 };
 
-productList.render();
+productList.products.forEach((product) => product.render());
