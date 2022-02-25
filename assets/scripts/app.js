@@ -54,3 +54,5 @@ const productList = {
 };
 
 productList.products.forEach((product) => product.render());
+
+// class
