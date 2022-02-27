@@ -11,6 +11,42 @@ class Product {
   }
 }
 
+class ProductItem {
+  constructor(product) {
+    this.product = product;
+  }
+
+  addToCart() {
+    console.log('adding product to cart...');
+    console.log(this.product);
+  }
+
+  render() {
+    const prodEl = document.createElement('li');
+    prodEl.className = 'product-item';
+    prodEl.innerHTML = `
+    <div>
+      <img src=${this.product.imageUrl} alt="${this.product.title}">
+      <div class="product-item__content">
+        <h2>${this.product.title}</h2>
+        <h3>$${this.product.price}</h3>
+        <p>${this.product.description}</p>
+        <button>Add to Cart</button>
+      </div>
+    </div>
+    `;
+
+    const addCartButton = prodEl.querySelector('button');
+
+
+    addCartButton.addEventListener('click', this.addToCart.bind(this));
+
+    return prodEl;
+  }
+
+}
+
+
 class ProductList {
   products = [
     new Product(
@@ -22,7 +58,7 @@ class ProductList {
 
     new Product(
       'A Carpet',
-      'https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Fencrypted-tbn0.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcRguboFDJKD0taDEfmb91oLJ2ZRxw2Pw1sRrn9wyGFqjn2KNcsQ%26s&sp=1645966309Td513f027e6937ac89002090fcf9dec2b214c5b3c03d35cb27c9e4937f23a0da2',
+      'https://media.istockphoto.com/vectors/pillow-vector-id1286304688?k=20&m=1286304688&s=612x612&w=0&h=wOwwOBPyERGVbAn8412_0WErJjXUe_3Iq-NaQjlCliw=',
       89.99,
       'A nice carpet'
     ),
@@ -34,27 +70,31 @@ class ProductList {
     prodList.className = 'product-list';
 
     this.products.forEach(prod => {
-      prodList.insertAdjacentHTML(
-        'beforeEnd',
-        `<li class='product-item'>
-              <div>
-                <img src=${prod.imageUrl} alt="${prod.title}">
-              </div>
-              <div class="product-item__content">
-                <h2>${prod.title}</h2>
-                <h3>$${prod.price}</h3>
-                <p>${prod.description}</p>
-                <button>Add to Cart</button>
-              </div>
-          </li>
-          `
-      );
-    })
+      const productItem = new ProductItem(prod);
+      const prodEl = productItem.render()
+      prodList.appendChild(prodEl);
+
+    });
+
 
     renderHook.append(prodList);
+
+
+    // prodList.addEventListener('click', function(e) {
+    //    if(e.target.classList.contains('product-button')) {
+    //      basket.push(e.target.closest('.product-item'))
+    //      console.table(basket);
+    //    } ;
+    // })
   }
+
 }
+
+
 
 const productList = new ProductList();
 
 productList.render();
+
+
+
