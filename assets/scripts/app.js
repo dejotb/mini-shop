@@ -11,6 +11,29 @@ class Product {
   }
 }
 
+
+class ShoppingCart {
+  items = [];
+
+  render() {
+    const cartEl = document.createElement('section');
+    cartEl.innerHTML = `
+    <h2> Total:  $${0}</h2>
+    <button>Order Now!</button>
+    `;
+    cartEl.className = 'cart';
+
+    return cartEl;
+  }
+};
+
+
+
+
+
+
+
+
 class ProductItem {
   constructor(product) {
     this.product = product;
@@ -65,7 +88,7 @@ class ProductList {
   ];
 
   render() {
-    const renderHook = document.querySelector('#app');
+
     const prodList = document.createElement('ul');
     prodList.className = 'product-list';
 
@@ -75,26 +98,27 @@ class ProductList {
       prodList.appendChild(prodEl);
 
     });
-
-
-    renderHook.append(prodList);
-
-
-    // prodList.addEventListener('click', function(e) {
-    //    if(e.target.classList.contains('product-button')) {
-    //      basket.push(e.target.closest('.product-item'))
-    //      console.table(basket);
-    //    } ;
-    // })
+    return prodList;
   }
 
 }
 
+class Shop {
+  render() {
+    const renderHook = document.querySelector('#app');
 
 
-const productList = new ProductList();
+    const cart = new ShoppingCart();
+    const cartEl = cart.render();
+    const productList = new ProductList();
+    const prodListEl = productList.render();
+    renderHook.append(cartEl);
+    renderHook.append(prodListEl);
+  }
+}
 
-productList.render();
+const shop = new Shop();
 
+shop.render()
 
 
