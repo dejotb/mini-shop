@@ -44,9 +44,15 @@ class ProductList {
 class ShoppingCart {
   items = [];
 
+  get totalAmmount() {
+    const sum = this.items.reduce((prevValue, curItem) => prevValue + curItem.price, 0);
+  return sum;
+  };
+
+
   addProduct(product) {
     this.items.push(product);
-    this.totalOutput.innerHTML = `<h2> Total:  $${1}</h2>`;
+    this.totalOutput.innerHTML = `<h2> Total:  $${this.totalAmmount.toFixed(2)}</h2>`;
   }
 
   render() {
@@ -70,8 +76,6 @@ class ProductItem {
 
   addToCart() {
     App.addProductToCart(this.product);
-
-
   }
 
   render() {
@@ -97,11 +101,7 @@ class ProductItem {
   }
 }
 
-
-
 class Shop {
-
-
   render() {
     const renderHook = document.querySelector('#app');
 
