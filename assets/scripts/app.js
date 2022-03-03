@@ -11,6 +11,40 @@ class Product {
   }
 }
 
+
+class ElementAttribute {
+  constructor(attrName, attrValue) {
+    this.name = attrName;
+    this.value = attrValue;
+  }
+}
+
+class Component {
+  constructor(renderHookId) {
+    this.hookId = renderHookId;
+  }
+
+
+
+  createRootElement(tag, cssClasses, attributes) {
+    const rootElement = document.querySelector(tag);
+    if (cssClasses) {
+      rootElement.className = cssClasses;
+    }
+    if (attributes && attributes.length > 0) {
+      for (const attr of attributes) {
+        rootElement.setAttribute(attr.name, attr.prevValue);
+      }
+    }
+    document.getElementById(this.hookId).append(rootElement);
+    return rootElement;
+  }
+}
+
+
+
+
+
 class ProductList {
   products = [
     new Product(
@@ -41,7 +75,7 @@ class ProductList {
   }
 }
 
-class ShoppingCart {
+class ShoppingCart extends Component {
   items = [];
 
   get totalAmmount() {
@@ -50,18 +84,20 @@ class ShoppingCart {
   };
 
 
+
+
+
   addProduct(product) {
     this.items.push(product);
     this.totalOutput.innerHTML = `<h2> Total:  $${this.totalAmmount.toFixed(2)}</h2>`;
   }
 
   render() {
-    const cartEl = document.createElement('section');
+    const cartEl = this.createRootElement('section', 'cart');
     cartEl.innerHTML = `
     <h2> Total:  $${0}</h2>
     <button>Order Now!</button>
     `;
-    cartEl.className = 'cart';
     this.totalOutput = cartEl.querySelector('h2');
     return cartEl;
   }
