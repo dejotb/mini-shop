@@ -27,13 +27,13 @@ class Component {
 
 
   createRootElement(tag, cssClasses, attributes) {
-    const rootElement = document.querySelector(tag);
+    const rootElement = document.createElement(tag);
     if (cssClasses) {
       rootElement.className = cssClasses;
     }
     if (attributes && attributes.length > 0) {
       for (const attr of attributes) {
-        rootElement.setAttribute(attr.name, attr.prevValue);
+        rootElement.setAttribute(attr.name, attr.value);
       }
     }
     document.getElementById(this.hookId).append(rootElement);
@@ -78,18 +78,27 @@ class ProductList {
 class ShoppingCart extends Component {
   items = [];
 
+  set cartItems(value) {
+    this.items = value;
+    this.totalOutput.innerHTML = `<h2> Total:  $${this.totalAmmount.toFixed(2)}</h2>`;
+  }
+
   get totalAmmount() {
     const sum = this.items.reduce((prevValue, curItem) => prevValue + curItem.price, 0);
   return sum;
   };
 
-
+  constructor(renderHookId) {
+    super(renderHookId);
+  }
 
 
 
   addProduct(product) {
     this.items.push(product);
-    this.totalOutput.innerHTML = `<h2> Total:  $${this.totalAmmount.toFixed(2)}</h2>`;
+    const updatedItems = [...this.items];
+    updatedItems.push(product);
+    this.cartItems = updatedItems;
   }
 
   render() {
@@ -99,7 +108,6 @@ class ShoppingCart extends Component {
     <button>Order Now!</button>
     `;
     this.totalOutput = cartEl.querySelector('h2');
-    return cartEl;
   }
 }
 
@@ -139,9 +147,9 @@ class ProductItem {
 
 class Shop {
   render() {
-    const renderHook = document.querySelector('#app');
+    const renderHook = document.getElementById('app');
 
-    this.cart = new ShoppingCart();
+    this.cart = new ShoppingCart('app');
     const cartEl = this.cart.render();
     const productList = new ProductList();
     const prodListEl = productList.render();
