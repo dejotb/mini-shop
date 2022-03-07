@@ -45,7 +45,7 @@ class Component {
 
 
 
-class ProductList {
+class ProductList extends Component {
   products = [
     new Product(
       'A Pillow',
@@ -62,16 +62,18 @@ class ProductList {
     ),
   ];
 
+  constructor(renderHookId) {
+    super(renderHookId);
+  }
+
   render() {
-    const prodList = document.createElement('ul');
-    prodList.className = 'product-list';
+    this.createRootElement('ul', 'product-list', [new ElementAttribute('id', 'prod-list')]);
+
 
     this.products.forEach((prod) => {
-      const productItem = new ProductItem(prod);
-      const prodEl = productItem.render();
-      prodList.appendChild(prodEl);
+      const productItem = new ProductItem(prod, 'prod-list');
+      productItem.render();
     });
-    return prodList;
   }
 }
 
@@ -113,8 +115,9 @@ class ShoppingCart extends Component {
 
 
 
-class ProductItem {
-  constructor(product) {
+class ProductItem extends Component {
+  constructor(product, renderHookId) {
+    super(renderHookId);
     this.product = product;
   }
 
@@ -123,8 +126,7 @@ class ProductItem {
   }
 
   render() {
-    const prodEl = document.createElement('li');
-    prodEl.className = 'product-item';
+    const prodEl = this.createRootElement('li', 'product-item');
     prodEl.innerHTML = `
     <div>
       <img src=${this.product.imageUrl} alt="${this.product.title}">
@@ -141,20 +143,18 @@ class ProductItem {
 
     addCartButton.addEventListener('click', this.addToCart.bind(this));
 
-    return prodEl;
   }
 }
 
 class Shop {
   render() {
-    const renderHook = document.getElementById('app');
 
     this.cart = new ShoppingCart('app');
-    const cartEl = this.cart.render();
-    const productList = new ProductList();
-    const prodListEl = productList.render();
-    renderHook.append(cartEl);
-    renderHook.append(prodListEl);
+    this.cart.render();
+    const productList = new ProductList('app');
+    productList.render();
+    // renderHook.append(cartEl);
+    // renderHook.append(prodListEl);
   }
 }
 
